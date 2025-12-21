@@ -1,5 +1,3 @@
-# Create router config file
-cat > configurations/router-config.txt << 'EOF'
 ! Router Configuration for Inter-VLAN Routing
 enable
 configure terminal

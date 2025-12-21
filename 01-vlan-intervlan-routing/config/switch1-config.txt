@@ -1,4 +1,3 @@
-
 ! SWITCH 1 CONFIGURATION
 ! Emmanuel Mukumbwa - CCNA Portfolio
 

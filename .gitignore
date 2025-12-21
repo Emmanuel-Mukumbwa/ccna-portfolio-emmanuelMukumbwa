@@ -1,15 +1,36 @@
-# Ignore Packet Tracer temp files
+# Ignore Packet Tracer TEMP files (auto-saves and backups)
 *.pkt.auto
 *.pkt.bak
+*.pkt.save
+*.pkt.tmp
+
+# IMPORTANT: DO NOT IGNORE .pkt files themselves!
+# *.pkt  <-- REMOVE THIS LINE!
 
 # Ignore Windows files
 Thumbs.db
 Desktop.ini
+.DS_Store
+*.lnk
 
 # Ignore large files
 *.zip
 *.rar
+*.7z
+*.tar.gz
 
-# Keep .pkt files but not autosaves
-*.pkt
-!*.pkt.auto
+# Ignore OS files
+*.log
+*.tmp
+*.temp
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore personal notes
+personal-notes.txt
+todo.txt
+EOF

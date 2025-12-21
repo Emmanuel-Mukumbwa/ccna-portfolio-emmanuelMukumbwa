@@ -1,5 +1,3 @@
-# Create verification commands file
-cat > verification/verification-commands.txt << 'EOF'
 VERIFICATION STEPS FOR VLAN PROJECT
 ====================================
 

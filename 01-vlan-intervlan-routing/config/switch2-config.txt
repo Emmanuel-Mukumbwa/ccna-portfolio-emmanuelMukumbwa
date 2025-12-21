@@ -1,5 +1,3 @@
-# Create switch2 config file
-cat > configurations/switch2-config.txt << 'EOF'
 ! Switch 2 Configuration
 enable
 configure terminal

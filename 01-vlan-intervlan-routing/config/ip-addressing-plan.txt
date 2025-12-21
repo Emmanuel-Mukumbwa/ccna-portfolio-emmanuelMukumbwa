@@ -1,5 +1,3 @@
-# In your project directory
-cat > ip-addressing-plan.txt << 'EOF'
 VLAN Design:
 ------------
 VLAN 10: SALES
