@@ -1,0 +1,15 @@
+# Ignore Packet Tracer temp files
+*.pkt.auto
+*.pkt.bak
+
+# Ignore Windows files
+Thumbs.db
+Desktop.ini
+
+# Ignore large files
+*.zip
+*.rar
+
+# Keep .pkt files but not autosaves
+*.pkt
+!*.pkt.auto

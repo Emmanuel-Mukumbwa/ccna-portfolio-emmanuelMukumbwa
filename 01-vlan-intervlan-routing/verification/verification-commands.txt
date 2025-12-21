@@ -1,0 +1,53 @@
+# Create verification commands file
+cat > verification/verification-commands.txt << 'EOF'
+VERIFICATION STEPS FOR VLAN PROJECT
+====================================
+
+1. ON SWITCHES:
+----------------
+SW1# show vlan brief
+SW1# show interfaces trunk
+SW1# show interfaces status
+SW1# show ip interface brief
+
+SW2# show vlan brief
+SW2# show interfaces trunk
+
+2. ON ROUTER:
+-------------
+R1# show ip interface brief
+R1# show vlans
+R1# show ip route
+R1# show ip dhcp binding
+
+3. PING TESTS (Expected Results):
+---------------------------------
+From PC1 (VLAN10) to:
+- PC4 (VLAN10): SUCCESS
+- PC2 (VLAN20): SUCCESS (via router)
+- PC5 (VLAN20): SUCCESS (via router)
+- Server: SUCCESS (via router)
+
+From PC2 (VLAN20) to:
+- PC5 (VLAN20): SUCCESS
+- PC3 (VLAN30): SUCCESS (via router)
+- Server: SUCCESS (via router)
+
+From Server to:
+- All PCs: SUCCESS
+
+4. DHCP VERIFICATION:
+---------------------
+On each PC:
+> ipconfig /all  (Windows)
+Should show:
+- Correct IP in respective VLAN subnet
+- Gateway = VLAN's router IP
+- DHCP Server = 192.168.99.1
+
+5. TRACEROUTE (If needed):
+--------------------------
+From PC1 to PC5:
+> tracert 192.168.20.20
+Should show router hop (192.168.10.1)
+EOF

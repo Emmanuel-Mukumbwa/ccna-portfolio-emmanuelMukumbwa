@@ -1,0 +1,64 @@
+# Create switch2 config file
+cat > configurations/switch2-config.txt << 'EOF'
+! Switch 2 Configuration
+enable
+configure terminal
+hostname SW2
+
+! Create VLANs (or learn from VTP - optional)
+vlan 10
+ name SALES
+vlan 20
+ name ENGINEERING
+vlan 30
+ name IT
+vlan 99
+ name MANAGEMENT
+ exit
+
+! Configure Access Ports
+interface FastEthernet0/1
+ description PC4-VLAN10
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+
+interface FastEthernet0/2
+ description PC5-VLAN20
+ switchport mode access
+ switchport access vlan 20
+ no shutdown
+
+interface FastEthernet0/3
+ description PC6-VLAN30
+ switchport mode access
+ switchport access vlan 30
+ no shutdown
+
+interface FastEthernet0/24
+ description Server-MANAGEMENT
+ switchport mode access
+ switchport access vlan 99
+ no shutdown
+
+! Configure Trunk to Switch1
+interface GigabitEthernet0/1
+ description TRUNK-to-SW1
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,30,99
+ no shutdown
+
+! Management VLAN
+interface Vlan99
+ description MANAGEMENT
+ ip address 192.168.99.3 255.255.255.0
+ no shutdown
+
+! Default Gateway
+ip default-gateway 192.168.99.1
+
+! Save Configuration
+end
+write memory
+EOF

@@ -1,0 +1,34 @@
+# In your project directory
+cat > ip-addressing-plan.txt << 'EOF'
+VLAN Design:
+------------
+VLAN 10: SALES
+Network: 192.168.10.0/24
+Gateway: 192.168.10.1
+Hosts: PC1, PC4
+
+VLAN 20: ENGINEERING  
+Network: 192.168.20.0/24
+Gateway: 192.168.20.1
+Hosts: PC2, PC5
+
+VLAN 30: IT
+Network: 192.168.30.0/24
+Gateway: 192.168.30.1
+Hosts: PC3, PC6
+
+VLAN 99: MANAGEMENT (Native VLAN)
+Network: 192.168.99.0/24
+Gateway: 192.168.99.1
+Hosts: Server (192.168.99.100)
+
+Device IP Assignment:
+--------------------
+PC1 (VLAN10): 192.168.10.10/24, GW: 192.168.10.1
+PC2 (VLAN20): 192.168.20.10/24, GW: 192.168.20.1
+PC3 (VLAN30): 192.168.30.10/24, GW: 192.168.30.1
+PC4 (VLAN10): 192.168.10.20/24, GW: 192.168.10.1
+PC5 (VLAN20): 192.168.20.20/24, GW: 192.168.20.1
+PC6 (VLAN30): 192.168.30.20/24, GW: 192.168.30.1
+Server: 192.168.99.100/24, GW: 192.168.99.1
+EOF

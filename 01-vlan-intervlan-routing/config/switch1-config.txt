@@ -1,0 +1,48 @@
+
+! SWITCH 1 CONFIGURATION
+! Emmanuel Mukumbwa - CCNA Portfolio
+
+enable
+configure terminal
+hostname SW1
+
+! VLAN Creation
+vlan 10
+ name SALES
+vlan 20
+ name ENGINEERING
+vlan 99
+ name MANAGEMENT
+exit
+
+! Interface Configuration
+interface FastEthernet0/1
+ description PC1-SALES-VLAN10
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+
+interface FastEthernet0/2
+ description PC2-ENGINEERING-VLAN20
+ switchport mode access
+ switchport access vlan 20
+ no shutdown
+
+interface GigabitEthernet0/1
+ description TRUNK-to-ROUTER
+ switchport mode trunk
+ switchport trunk native vlan 99
+ no shutdown
+
+! Management Interface
+interface Vlan99
+ ip address 192.168.99.2 255.255.255.0
+ no shutdown
+ip default-gateway 192.168.99.1
+
+end
+write memory
+EOF
+
+# Create similar files for switch2-config.txt and router-config.txt
+# (Use the detailed configs from previous message)
