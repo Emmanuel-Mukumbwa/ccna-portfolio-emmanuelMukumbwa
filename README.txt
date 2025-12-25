@@ -7,10 +7,6 @@ This repository contains hands-on networking projects demonstrating my CCNA skil
 Certification
 Cisco Certified Network Associate (CCNA)
 
-Certification Date: [Date of Certification]
-
-Certification ID: [Your CCNA ID]
-
 Projects
 Project 1: VLAN & Inter-VLAN Routing
 Complete implementation of VLAN segmentation with Router-on-a-Stick configuration, including real-world troubleshooting of Native VLAN mismatch.
