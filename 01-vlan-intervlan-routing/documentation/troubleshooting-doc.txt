@@ -1,0 +1,187 @@
+Troubleshooting Report: Native VLAN Mismatch
+Issue: CDP Native VLAN Mismatch between Cisco Switches
+Date: December 16, 2024
+Author: Emmanuel Mukumbwa, CCNA
+Status: RESOLVED 
+
+Executive Summary
+During configuration of inter-switch trunk links in a VLAN segmentation project, a Native VLAN mismatch was detected by Cisco Discovery Protocol (CDP), causing Spanning Tree Protocol to block the port. This report documents the error, root cause analysis, resolution steps, and lessons learned.
+
+1. Issue Identification
+1.1 Error Message
+text
+SW1# 
+%CDP-4-NATIVE_VLAN_MISMATCH: Native VLAN mismatch discovered on FastEthernet0/24 (99), with Switch GigabitEthernet0/1 (1).
+1.2 Network Topology at Time of Error
+text
+     [SW1] FastEthernet0/24 ------ GigabitEthernet0/1 [SW2]
+        Native VLAN: 99              Native VLAN: 1 (default)
+1.3 Symptoms Observed
+CDP error messages on console
+
+Trunk port in blocking state (STP blocked)
+
+No data traffic passing between switches
+
+VLANs not extending across switches
+
+2. Technical Analysis
+2.1 What is Native VLAN?
+The Native VLAN is the untagged VLAN on an 802.1Q trunk link. All traffic for this VLAN passes untagged, while other VLANs are tagged.
+
+2.2 Default Cisco Behavior
+Default native VLAN on Cisco switches: VLAN 1
+
+All ports are in VLAN 1 by default
+
+CDP, STP, VTP, and other control traffic use native VLAN
+
+2.3 Security Implications
+Native VLAN mismatch can cause:
+
+Security vulnerabilities: Untagged traffic could be intercepted
+
+Protocol issues: CDP, STP may not function properly
+
+Connectivity problems: Data traffic may be blocked
+
+2.4 Spanning Tree Response
+STP blocks mismatched ports to prevent:
+
+Switching loops
+
+Broadcast storms
+
+Network instability
+
+3. Root Cause Analysis
+Component	Configured Value	Expected Value	Mismatch?
+SW1 Fa0/24 Native VLAN	99	99	No
+SW2 Gi0/1 Native VLAN	1 (default)	99	YES
+Result	PORT BLOCKED	Port Forwarding	
+Root Cause: Inconsistent native VLAN configuration on trunk link endpoints.
+
+4. Resolution Steps
+4.1 Access SW2 Console
+text
+Switch> enable
+Switch# configure terminal
+4.2 Configure Matching Native VLAN
+text
+Switch(config)# interface GigabitEthernet0/1
+Switch(config-if)# description TRUNK-to-SW1
+Switch(config-if)# switchport mode trunk
+Switch(config-if)# switchport trunk native vlan 99    ! CRITICAL FIX
+Switch(config-if)# switchport trunk allowed vlan 10,20,30,99
+Switch(config-if)# no shutdown
+Switch(config-if)# end
+4.3 Save Configuration
+text
+Switch# write memory
+Building configuration...
+[OK]
+4.4 Success Confirmation
+text
+%SPANTREE-2-UNBLOCK_CONSIST_PORT: Unblocking GigabitEthernet0/1 on VLAN0099. Port consistency restored.
+5. Verification & Testing
+5.1 Immediate Verification
+text
+! On SW2 after fix
+SW2# show interfaces trunk
+
+Port        Mode             Encapsulation  Status        Native vlan
+Gi0/1       on               802.1q         trunking      99          ! ? MATCHING
+
+Port        Vlans allowed on trunk
+Gi0/1       10,20,30,99
+
+Port        Vlans allowed and active in management domain
+Gi0/1       10,20,30,99
+5.2 End-to-End Testing
+Test Matrix Results:
+
+Source (VLAN)	Destination (VLAN)	Expected Result	Actual Result
+PC1 (10)	PC4 (10)	? SUCCESS	? SUCCESS
+PC2 (20)	PC5 (20)	? SUCCESS	? SUCCESS
+PC3 (30)	PC6 (30)	? SUCCESS	? SUCCESS
+PC1 (10)	PC2 (20)	? SUCCESS	? SUCCESS
+Server (99)	All PCs	? SUCCESS	? SUCCESS
+5.3 Final Verification Commands
+text
+! Verify on both switches
+show interfaces trunk
+show vlan brief
+show interfaces status
+show spanning-tree vlan 99
+show cdp neighbors
+6. Configuration Files (Final)
+6.1 SW1 Configuration (Excerpt)
+text
+interface FastEthernet0/24
+ description TRUNK-to-SW2
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,30,99
+ no shutdown
+6.2 SW2 Configuration (Excerpt)
+text
+interface GigabitEthernet0/1
+ description TRUNK-to-SW1
+ switchport mode trunk
+ switchport trunk native vlan 99    ! Corrected to match SW1
+ switchport trunk allowed vlan 10,20,30,99
+ no shutdown
+7. Lessons Learned
+7.1 Technical Lessons
+Always configure both ends of trunk links with matching native VLAN
+
+Never use default VLAN 1 for native VLAN (security best practice)
+
+CDP is invaluable for troubleshooting layer 2 issues
+
+Spanning Tree blocks mismatched ports to protect network stability
+
+7.2 Process Improvements
+Document baseline configurations before implementation
+
+Verify configurations on both ends of links
+
+Use consistent naming conventions for interfaces
+
+Test connectivity after each configuration change
+
+7.3 Best Practices Implemented
+? Use non-default native VLAN (e.g., 99)
+? Explicitly configure allowed VLANs on trunks
+? Use interface descriptions for documentation
+? Verify with show commands after configuration
+
+8. Screenshot Evidence
+Before Fix:
+
+CDP error message on SW1 console
+
+show interfaces trunk showing mismatched native VLANs
+
+Port status showing "err-disabled" or "blocking"
+
+After Fix:
+
+Spanning Tree unblock message
+
+show interfaces trunk showing consistent native VLAN 99
+
+Successful ping tests between VLANs
+
+9. References
+Cisco CCNA Certification Guide
+
+Cisco IOS Configuration Guides
+
+IEEE 802.1Q VLAN Standard
+
+Best Practices for Enterprise Networks
+
+10. Conclusion
+The Native VLAN mismatch was successfully resolved by configuring consistent native VLAN (99) on both ends of the trunk link. This incident reinforced the importance of thorough configuration verification and provided valuable hands-on troubleshooting experience. The network is now fully operational with proper VLAN segmentation and inter-VLAN routing.
+
