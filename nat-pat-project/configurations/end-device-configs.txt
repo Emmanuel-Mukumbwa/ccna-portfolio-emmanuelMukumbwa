@@ -1,0 +1,39 @@
+PC1:
+
+IP: 192.168.1.10
+
+Subnet: 255.255.255.0
+
+Gateway: 192.168.1.1
+
+DNS: 8.8.8.8
+
+PC2:
+
+IP: 192.168.1.11
+
+Subnet: 255.255.255.0
+
+Gateway: 192.168.1.1
+
+DNS: 8.8.8.8
+
+Internal Server:
+
+IP: 192.168.1.100
+
+Subnet: 255.255.255.0
+
+Gateway: 192.168.1.1
+
+Enable HTTP service
+
+Web Server (External):
+
+IP: 203.0.113.10
+
+Subnet: 255.255.255.0
+
+Gateway: 203.0.113.1
+
+Enable HTTP service

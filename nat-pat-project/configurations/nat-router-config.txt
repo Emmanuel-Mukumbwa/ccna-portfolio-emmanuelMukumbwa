@@ -1,0 +1,38 @@
+enable
+configure terminal
+hostname NAT-Router
+no ip domain-lookup
+
+! Inside Interface
+interface GigabitEthernet0/0
+ ip address 192.168.1.1 255.255.255.0
+ ip nat inside
+ no shutdown
+ description INSIDE-NETWORK
+
+! Outside Interface
+interface GigabitEthernet0/1
+ ip address 10.0.0.1 255.255.255.252
+ ip nat outside
+ no shutdown
+ description TO-ISP-ROUTER
+
+! Default route to ISP
+ip route 0.0.0.0 0.0.0.0 10.0.0.2
+
+! NAT Configuration
+access-list 1 permit 192.168.1.0 0.0.0.255
+ip nat inside source list 1 interface GigabitEthernet0/1 overload
+
+! Static NAT for Internal Server
+ip nat inside source static 192.168.1.100 10.0.0.1
+
+! DHCP for Inside Network
+ip dhcp excluded-address 192.168.1.1 192.168.1.10
+ip dhcp pool INSIDE_POOL
+ network 192.168.1.0 255.255.255.0
+ default-router 192.168.1.1
+ dns-server 8.8.8.8
+
+end
+write memory

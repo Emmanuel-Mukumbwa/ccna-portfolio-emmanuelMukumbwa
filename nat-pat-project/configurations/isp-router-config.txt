@@ -1,0 +1,25 @@
+enable
+configure terminal
+hostname ISP-Router
+no ip domain-lookup
+
+! Interface to NAT Router
+interface GigabitEthernet0/0
+ ip address 10.0.0.2 255.255.255.252
+ no shutdown
+ description TO-NAT-ROUTER
+
+! Interface to External Network
+interface GigabitEthernet0/1
+ ip address 203.0.113.1 255.255.255.0
+ no shutdown
+ description EXTERNAL-NETWORK
+
+! Static route to Inside Network via NAT Router
+ip route 192.168.1.0 255.255.255.0 10.0.0.1
+
+! Enable routing
+ip routing
+
+end
+write memory

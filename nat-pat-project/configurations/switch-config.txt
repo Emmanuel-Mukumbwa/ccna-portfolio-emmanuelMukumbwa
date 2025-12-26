@@ -1,0 +1,27 @@
+enable
+configure terminal
+hostname Access-Switch
+
+! Configure ports
+interface range FastEthernet0/1-4
+ switchport mode access
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security mac-address sticky
+ no shutdown
+
+! Port descriptions
+interface FastEthernet0/1
+ description TO-NAT-ROUTER-G0/0
+
+interface FastEthernet0/2
+ description PC1-INSIDE
+
+interface FastEthernet0/3
+ description PC2-INSIDE
+
+interface FastEthernet0/4
+ description INTERNAL-SERVER
+
+end
+write memory
